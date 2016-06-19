@@ -2,4 +2,4 @@
 
 > Um simples jogo de corrida.
 
-![](https://github.com/theuves/cor/blob/master/img/exemplo.gif)
+![](https://github.com/theuves/cor/blob/gh-pages/img/exemplo.gif)
