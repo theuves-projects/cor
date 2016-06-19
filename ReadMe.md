@@ -3,3 +3,14 @@
 > Um simples jogo de corrida.
 
 ![](https://github.com/theuves/cor/blob/gh-pages/img/exemplo.gif)
+
+## Uso
+
+Acesse-o no seguinte endereço: [theuves.github.io/cor](https://theuves.github.io/cor/).
+
+ - <kbd>Enter</kbd> — para iniciar ou reiniciar o jogo
+ - <kbd>↑</kbd> ou <kbd>↓</kbd> — para movimentar o personagem para cima ou para baixo
+
+## Licença
+
+MIT &copy; [Matheus Alves](https://twitter.com/theuves)
