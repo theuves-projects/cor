@@ -6,9 +6,28 @@ document.querySelector('.record').innerHTML = localStorage.pontos;
 
 var primeiro = true;
 var final = false;
+var pausado = false;
 
 addEventListener('keypress', function (event) {
+	if (event.keyCode === 112) {
+		if (final === false) {
+			clearInterval(intervalo);
+			pausado = true;
+			
+			document.querySelector('.jogo').hidden = true;
+			document.querySelector('.pausado').hidden = false;
+			
+			document.querySelector('.pontos-pausado').innerHTML = document.querySelector('.pontos').innerHTML;
+		}
+	}
     if (event.keyCode === 13) {
+		if (final === false && pausado === true) {
+			definaIntervalo(cb, v);
+			document.querySelector('.pausado').hidden = true;
+            document.querySelector('.jogo').hidden = false;
+			
+			pausado = false;
+		}	
         if (final === false && primeiro === true) {
             definaIntervalo(cb, v);
             document.querySelector('.inicio').hidden = true;
@@ -68,6 +87,7 @@ function fim() {
         localStorage.pontos = document.querySelector('.pontos').innerHTML;
     }
 
+    document.querySelector('.pontos-pausado').innerHTML = '0000000';
     final = true;
 }
 
