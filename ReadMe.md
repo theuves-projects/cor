@@ -6,7 +6,7 @@
 
 ## Uso
 
-Acesse-o no seguinte endereço: [theuves.github.io/cor](https://theuves.github.io/cor/).
+Acesse-o no seguinte endereço: [theuves.github.io/cor](https://theuves.github.io/cor/), e use:
 
  - <kbd>Enter</kbd> — para iniciar ou reiniciar o jogo
  - <kbd>↑</kbd> ou <kbd>↓</kbd> — para movimentar o personagem para cima ou para baixo
