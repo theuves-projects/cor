@@ -1,1 +1,0 @@
-Todos os áudios foram obtidos em: http://www.wavsource.com/sfx/sfx.htm.
