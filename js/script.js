@@ -9,32 +9,40 @@ var final = false;
 var pausado = false;
 
 addEventListener('keypress', function (event) {
-	if (event.keyCode === 112) {
-		if (final === false) {
-			clearInterval(intervalo);
-			pausado = true;
-			
-			document.querySelector('.jogo').hidden = true;
-			document.querySelector('.pausado').hidden = false;
-			
-			document.querySelector('.pontos-pausado').innerHTML = document.querySelector('.pontos').innerHTML;
-		}
-	}
+    if (event.keyCode === 112) {
+        new Audio('audio/typewriter_click.wav').play();
+
+        if (final === false) {
+            clearInterval(intervalo);
+            pausado = true;
+
+            document.querySelector('.jogo').hidden = true;
+            document.querySelector('.pausado').hidden = false;
+
+            document.querySelector('.pontos-pausado').innerHTML = document.querySelector('.pontos').innerHTML;
+        }
+    }
     if (event.keyCode === 13) {
-		if (final === false && pausado === true) {
-			definaIntervalo(cb, v);
-			document.querySelector('.pausado').hidden = true;
+        if (final === false && pausado === true) {
+            new Audio('audio/typewriter_click.wav').play();
+
+            definaIntervalo(cb, v);
+            document.querySelector('.pausado').hidden = true;
             document.querySelector('.jogo').hidden = false;
-			
-			pausado = false;
-		}	
+
+            pausado = false;
+        }
         if (final === false && primeiro === true) {
+            new Audio('audio/typewriter_click.wav').play();
+
             definaIntervalo(cb, v);
             document.querySelector('.inicio').hidden = true;
             document.querySelector('.jogo').hidden = false;
 
             primeiro = false;
         } else if (final === true) {
+            new Audio('audio/typewriter_click.wav').play();
+
             final = false;
 
             document.querySelector('.lado1').innerHTML = '░';
@@ -78,6 +86,8 @@ addEventListener('keypress', function (event) {
 });
 
 function fim() {
+    new Audio('audio/chime.wav').play();
+
     clearInterval(intervalo);
     document.querySelector('.jogo').hidden = true;
     document.querySelector('.fim').hidden = false;
@@ -132,6 +142,8 @@ addEventListener('keydown', function (event) {
             document.querySelector('.lado2').innerHTML = '░';
 
             lado = 'c';
+
+            new Audio('audio/womp.wav').play();
         }
 
         if (event.keyCode === 40) {
@@ -139,6 +151,8 @@ addEventListener('keydown', function (event) {
             document.querySelector('.lado2').innerHTML = '█'; // escolhido
 
             lado = 'b';
+
+            new Audio('audio/womp.wav').play();
         }
     }
 });
