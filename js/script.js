@@ -1,3 +1,9 @@
+var audio = {
+    tecla: new Audio('audio/typewriter_click.wav'),
+    movimento: new Audio('audio/womp.wav'),
+    fim: new Audio('audio/chime.wav')
+};
+
 if (localStorage.pontos === undefined) {
     localStorage.pontos = '0000000';
 }
@@ -10,7 +16,7 @@ var pausado = false;
 
 addEventListener('keypress', function (event) {
     if (event.keyCode === 112) {
-        new Audio('audio/typewriter_click.wav').play();
+        audio.tecla.play();
 
         if (final === false) {
             clearInterval(intervalo);
@@ -24,7 +30,7 @@ addEventListener('keypress', function (event) {
     }
     if (event.keyCode === 13) {
         if (final === false && pausado === true) {
-            new Audio('audio/typewriter_click.wav').play();
+            audio.tecla.play();
 
             definaIntervalo(cb, v);
             document.querySelector('.pausado').hidden = true;
@@ -33,7 +39,7 @@ addEventListener('keypress', function (event) {
             pausado = false;
         }
         if (final === false && primeiro === true) {
-            new Audio('audio/typewriter_click.wav').play();
+            audio.tecla.play();
 
             definaIntervalo(cb, v);
             document.querySelector('.inicio').hidden = true;
@@ -41,7 +47,7 @@ addEventListener('keypress', function (event) {
 
             primeiro = false;
         } else if (final === true) {
-            new Audio('audio/typewriter_click.wav').play();
+            audio.tecla.play();
 
             final = false;
 
@@ -86,7 +92,7 @@ addEventListener('keypress', function (event) {
 });
 
 function fim() {
-    new Audio('audio/chime.wav').play();
+    audio.fim.play();
 
     clearInterval(intervalo);
     document.querySelector('.jogo').hidden = true;
@@ -143,7 +149,7 @@ addEventListener('keydown', function (event) {
 
             lado = 'c';
 
-            new Audio('audio/womp.wav').play();
+            audio.movimento.play();
         }
 
         if (event.keyCode === 40) {
@@ -152,7 +158,7 @@ addEventListener('keydown', function (event) {
 
             lado = 'b';
 
-            new Audio('audio/womp.wav').play();
+            audio.movimento.play();
         }
     }
 });
@@ -215,7 +221,6 @@ var cb = function () {
                 qual1 = '';
                 fim1 = false;
             }
-
         }
     }
 
