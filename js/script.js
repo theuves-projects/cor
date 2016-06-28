@@ -44,7 +44,7 @@ addEventListener('keypress', function (event) {
             // reproduz som de tecla
             reproduzir('typewriter_click');
 
-            // pausa
+            // pausa o jogo
             clearInterval(intervalo);
             pausado = true; // informa que o jogo está pausado
 
@@ -56,16 +56,27 @@ addEventListener('keypress', function (event) {
         }
     }
 
-    if (e.keyCode === 13) {
+    // se a tecla enter for pressionada
+    if (kc === tecla.enter) {
+
+        // se não estiver na tela final e se o jogo
+        // estiver pausado
         if (final === false && pausado === true) {
+
+            // reproduz som de tecla
             reproduzir('typewriter_click');
 
+            // volta o jogo
             definaIntervalo(cb, v);
+
+            // esconde a tela de pause e mostra a tela do jogo
             document.querySelector('.pausado').hidden = true;
             document.querySelector('.jogo').hidden = false;
 
+            // informa que o jogo não está pausado
             pausado = false;
         }
+
         if (final === false && inicio === true) {
             reproduzir('typewriter_click');
 
