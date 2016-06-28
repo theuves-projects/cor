@@ -24,20 +24,39 @@ var final = false; // se está na tela final
 var pausado = false; // se está pausado
 
 addEventListener('keypress', function (event) {
-    if (event.keyCode === 112) {
+
+    // código da tecla pressionada
+    var kc = event.keyCode;
+
+    // códigos da teclas
+    var tecla = {
+        p: 112,
+        enter: 13
+    };
+
+    // se for pressionadoa a tecla `p`
+    if (kc === tecla.p) {
+
+        // se o jogador estiver jogando, ou seja se
+        // NÃO estiver tela inicial ou na tela final
         if (final === false && inicio === false) {
+
+            // reproduz som de tecla
             reproduzir('typewriter_click');
 
+            // pausa
             clearInterval(intervalo);
-            pausado = true;
+            pausado = true; // informa que o jogo está pausado
 
-            document.querySelector('.jogo').hidden = true;
-            document.querySelector('.pausado').hidden = false;
+            qs('.jogo').hidden = true; // esconde tela do jogo
+            qs('.pausado').hidden = false; // exibe tela pausada
 
-            document.querySelector('.pontos-pausado').innerHTML = document.querySelector('.pontos').innerHTML;
+            // passa os pontos feitos até o momento para a tela pausada
+            qa('.pontos-pausado').innerHTML = qs('.pontos').innerHTML;
         }
     }
-    if (event.keyCode === 13) {
+
+    if (e.keyCode === 13) {
         if (final === false && pausado === true) {
             reproduzir('typewriter_click');
 
