@@ -16,9 +16,9 @@ var pausado = false;
 
 addEventListener('keypress', function (event) {
     if (event.keyCode === 112) {
-        audio.tecla.play();
+        if (final === false && primeiro === false) {
+            audio.tecla.play();
 
-        if (final === false) {
             clearInterval(intervalo);
             pausado = true;
 
