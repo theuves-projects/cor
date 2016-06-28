@@ -69,23 +69,31 @@ addEventListener('keypress', function (event) {
             // volta o jogo
             definaIntervalo(cb, v);
 
-            // esconde a tela de pause e mostra a tela do jogo
-            document.querySelector('.pausado').hidden = true;
-            document.querySelector('.jogo').hidden = false;
+            // esconde a tela de pause e
+            // mostra a tela do jogo
+            qs('.pausado').hidden = true;
+            qs('.jogo').hidden = false;
 
             // informa que o jogo não está pausado
             pausado = false;
         }
 
+        // primeira jogada, se o jogo estiver na tela inicial
         if (final === false && inicio === true) {
+
+            // reproduz som de tecla
             reproduzir('typewriter_click');
 
+            // inicia jogo
             definaIntervalo(cb, v);
-            document.querySelector('.inicio').hidden = true;
-            document.querySelector('.jogo').hidden = false;
+            qs('.inicio').hidden = true;
+            qs('.jogo').hidden = false;
 
+            // informa que o jogo já começou
             inicio = false;
-        } else if (final === true) {
+        }
+
+        if (final === true) {
             reproduzir('typewriter_click');
 
             final = false;
