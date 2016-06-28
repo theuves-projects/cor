@@ -1,23 +1,32 @@
-var audio = {
-    tecla: new Audio('audio/typewriter_click.wav'),
-    movimento: new Audio('audio/womp.wav'),
-    fim: new Audio('audio/chime.wav')
-};
 
+// equivalente a `document.querySelector`
+function qs(sel) {
+    return document.querySelector(sel);
+}
+
+// reproduzir um audio
+function reproduzir(nome) {
+    new Audio('audio/' + nome + '.wav').play();
+}
+
+// registra pontuação se for a primeira
+// vez que a página foi acessada
 if (localStorage.pontos === undefined) {
     localStorage.pontos = '0000000';
 }
 
-document.querySelector('.record').innerHTML = localStorage.pontos;
+// exibe a maior pontuação registrada
+qs('.record').innerHTML = localStorage.pontos;
 
-var primeiro = true;
-var final = false;
-var pausado = false;
+// variáveis de estado do jogo
+var inicio = true; // se está na tela inicial
+var final = false; // se está na tela final
+var pausado = false; // se está pausado
 
 addEventListener('keypress', function (event) {
     if (event.keyCode === 112) {
-        if (final === false && primeiro === false) {
-            audio.tecla.play();
+        if (final === false && inicio === false) {
+            reproduzir('typewriter_click');
 
             clearInterval(intervalo);
             pausado = true;
@@ -30,7 +39,7 @@ addEventListener('keypress', function (event) {
     }
     if (event.keyCode === 13) {
         if (final === false && pausado === true) {
-            audio.tecla.play();
+            reproduzir('typewriter_click');
 
             definaIntervalo(cb, v);
             document.querySelector('.pausado').hidden = true;
@@ -38,16 +47,16 @@ addEventListener('keypress', function (event) {
 
             pausado = false;
         }
-        if (final === false && primeiro === true) {
-            audio.tecla.play();
+        if (final === false && inicio === true) {
+            reproduzir('typewriter_click');
 
             definaIntervalo(cb, v);
             document.querySelector('.inicio').hidden = true;
             document.querySelector('.jogo').hidden = false;
 
-            primeiro = false;
+            inicio = false;
         } else if (final === true) {
-            audio.tecla.play();
+            reproduzir('typewriter_click');
 
             final = false;
 
@@ -92,7 +101,7 @@ addEventListener('keypress', function (event) {
 });
 
 function fim() {
-    audio.fim.play();
+    reproduzir('chime');
 
     clearInterval(intervalo);
     document.querySelector('.jogo').hidden = true;
@@ -149,7 +158,8 @@ addEventListener('keydown', function (event) {
 
             lado = 'c';
 
-            audio.movimento.play();
+            // audio.movimento.play();
+            reproduzir('womp');
         }
 
         if (event.keyCode === 40) {
@@ -158,7 +168,8 @@ addEventListener('keydown', function (event) {
 
             lado = 'b';
 
-            audio.movimento.play();
+            // audio.movimento.play();
+            reproduzir('womp');
         }
     }
 });
@@ -178,36 +189,31 @@ var cb = function () {
         vezes = vezes + 2;
     }
 
+    var regex = /^(\░|\▓)/;
+
+    function defina(rua, oque) {
+        document.querySelector(rua).innerHTML = document.querySelector(rua).innerHTML.replace(/^(\░|\▓)/, '') + oque;
+    }
+
+    // define aleatoriamente o lado em que
+    // o carro irá nascer
     var n = Math.floor(Math.random() * 2);
 
     if (vezes === 0 || vezes === 7 || vezes === 14) {
         if (n === 0) {
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML + '▓';
-
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML + '░';
+            defina('.rua1', '▓');
+            defina('.rua2', '░');
         } else {
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML + '▓';
-
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML + '░';
+            defina('.rua2', '▓');
+            defina('.rua1', '░');
         }
     } else {
         if (n === 0) {
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML.replace(/^(\░|\▓)/, '');
-
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML + '░';
-
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML + '░';
+            defina('.rua1', '░');
+            defina('.rua2', '░');
         } else {
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua2').innerHTML = document.querySelector('.rua2').innerHTML + '░';
-
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML.replace(/^(\░|\▓)/, '');
-            document.querySelector('.rua1').innerHTML = document.querySelector('.rua1').innerHTML + '░';
+            defina('.rua2', '░');
+            defina('.rua1', '░');
         }
     }
 
