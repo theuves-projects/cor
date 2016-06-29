@@ -275,7 +275,7 @@ addEventListener('keydown', function (event) {
         if (final) jogue();
     }
 
-    if (event.keyCode === 112 && !final && !inicio) pause(true);
+    if (event.keyCode === 80 && !final && !inicio) pause(true);
 
     if (event.keyCode === 38) mover(obj.car, obj.rua);
     if (event.keyCode === 40) mover(obj.rua, obj.car);
