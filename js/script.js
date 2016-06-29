@@ -1,11 +1,9 @@
 'use strict';
 
-var zeros = '0000000';
-
-var caracteres = {
-    principal: ,
-    adversario: ,
-    rua:
+var obj = {
+    car: '\u2588',
+    adv: '\u2593',
+    rua: '\u2591'
 };
 
 function qs(sel) {
@@ -46,25 +44,27 @@ function fim() {
     }
 
     qs('.seus-pontos').innerHTML = pontos;
-    qs('.pontos-pausado').innerHTML = zeros;
+    qs('.pontos-pausado').innerHTML = '0000000';
 
     final = true;
 }
 
-function add(className, nums) {
-    var val = qs(className).innerHTML;
+function add(cn) {
+    var nums = cn === '.pontos' ? '0000000' : '000';
+
+    var val = qs(cn).innerHTML;
     var novo = (parseInt(val) + 1).toString();
 
     var ponto = nums.substr(0, nums.length - novo.length) + novo;
-    qs(className).innerHTML = ponto;
+    qs(cn).innerHTML = ponto;
 }
 
 if (!localStorage.getItem('pontos')) {
-    localStorage.setItem('pontos', zeros);
+    localStorage.setItem('pontos', '0000000');
 }
 
 qs('.record').innerHTML = localStorage.pontos;
-qs(['.lado1', '.lado2'][rand(2)]).innerHTML = '█';
+qs(['.lado1', '.lado2'][rand(2)]).innerHTML = obj.car;
 
 var vezes = 0;
 var fim1 = false;
@@ -76,88 +76,88 @@ var v = 100;
 var cb = function () {
     function tc() {
         var lds = [
-            qs('.rua1').innerHTML.charAt(13),
-            qs('.rua2').innerHTML.charAt(13)
+            qs('.rua1').innerHTML[13],
+            qs('.rua2').innerHTML[13]
         ];
 
-        return lds[0] === '▓' || lds[1] === '▓';
+        return lds[0] === obj.adv || lds[1] === obj.adv;
     }
 
     vezes = vezes === 0 && tc() ? vezes += 2 : vezes;
 
     function adicionar(rua, oque) {
-        var re = /^(\░|\▓)/;
+        var re = new RegExp('^(' + obj.rua + '|' + obj.adv + ')');
 
         qs(rua).innerHTML = qs(rua).innerHTML.replace(re, '') + oque;
     }
 
-    var rua1 = '░';
-    var rua2 = '░';
+    var rua1 = obj.rua;
+    var rua2 = obj.rua;
 
     if (!(vezes % 7)) {
         var n = rand(2);
 
-        rua1 = n === 0 ? '▓' : rua1;
-        rua2 = n !== 0 ? '▓' : rua2;
+        rua1 = n === 0 ? obj.adv : rua1;
+        rua2 = n !== 0 ? obj.adv : rua2;
     }
 
     adicionar('.rua1', rua1);
     adicionar('.rua2', rua2);
 
-    if (qual1 && qs(qual1).innerHTML === '▓') {
-        qs(qual1).innerHTML = '░';
+    if (qual1 && qs(qual1).innerHTML === obj.adv) {
+        qs(qual1).innerHTML = obj.rua;
         qual1 = '';
         fim1 = false;
     }
 
     if (fim1) {
-        if (qs(qual1).innerHTML === '█') {
+        if (qs(qual1).innerHTML === obj.car) {
             fim();
 
             return;
         } else {
-            add('.pontos', zeros);
+            add('.pontos');
             var pontos = parseInt(qs('.pontos').innerHTML);
 
             if (!(pontos % 5) && pontos > 0) {
-                add('.velocidade', '000');
+                add('.velocidade');
 
                 v -= 1;
                 definaIntervalo(cb, v);
             }
 
-            qs(qual1).innerHTML = '▓';
+            qs(qual1).innerHTML = obj.adv;
         }
     }
 
-    if (qs('.rua1').innerHTML.substr(0, 1) === '▓') {
+    if (qs('.rua1').innerHTML[0] === obj.adv) {
         fim1 = true;
         qual1 = '.lado1';
     }
 
-    if (qs('.rua2').innerHTML.substr(0, 1) === '▓') {
+    if (qs('.rua2').innerHTML[0] === obj.adv) {
         fim1 = true;
         qual1 = '.lado2';
     }
 
-    if (qual2 && qs(qual2).innerHTML === '▓') {
-        qs(qual2).innerHTML = '░';
+    if (qual2 && qs(qual2).innerHTML === obj.adv) {
+        qs(qual2).innerHTML = obj.rua;
         qual2 = '';
         fim2 = false;
     }
 
-    if (fim2) qs(qual2).innerHTML = '▓';
+    if (fim2) qs(qual2).innerHTML = obj.adv;
 
     var l1 = qs('.lado1').innerHTML;
     var l2 = qs('.lado2').innerHTML;
 
-    if (l1 === '▓' || l2 === '▓') {
+    if (l1 === obj.adv || l2 === obj.adv) {
         fim2 = true;
 
-        qual2 = l1 === '▓' ? '.u1' : '.u2';
+        qual2 = l1 === obj.adv ? '.u1' : '.u2';
     }
 
-    if (l1 !== '█' && l2 !== '█') {
+    if (l1 !== obj.car && l2 !== obj.car) {
         fim();
         return;
     }
@@ -167,23 +167,23 @@ var cb = function () {
 
 var intervalo;
 
-function definaIntervalo(callback, velocidade) {
+function definaIntervalo(callback, vel) {
     clearInterval(intervalo);
 
-    intervalo = setInterval(callback, velocidade);
+    intervalo = setInterval(callback, vel);
 }
 
 function resetarJogo() {
-    qs('.lado1').innerHTML = '░';
-    qs('.lado2').innerHTML = '░';
+    qs('.lado1').innerHTML = obj.rua;
+    qs('.lado2').innerHTML = obj.rua;
 
     var lado = ['.lado1', '.lado2'][rand(2)];
 
-    qs(lado).innerHTML = '█';
-    qs('.rua1').innerHTML = '░░░░░░░░░░░░░░░';
-    qs('.rua2').innerHTML = '░░░░░░░░░░░░░░░';
-    qs('.u1').innerHTML = '░';
-    qs('.u2').innerHTML = '░';
+    qs(lado).innerHTML = obj.car;
+    qs('.rua1').innerHTML = repetir(obj.rua, 15);
+    qs('.rua2').innerHTML = repetir(obj.rua, 15);
+    qs('.u1').innerHTML = obj.rua;
+    qs('.u2').innerHTML = obj.rua;
 
     vezes = 0;
     fim1 = false;
@@ -192,9 +192,9 @@ function resetarJogo() {
     qual2 = '';
     v = 100;
 
-    qs('.pontos').innerHTML = zeros;
-    qs('.velocidade').innerHTML = zeros.substr(-3);
-    qs('.seus-pontos').innerHTML = zeros;
+    qs('.pontos').innerHTML = '0000000';
+    qs('.velocidade').innerHTML = '000';
+    qs('.seus-pontos').innerHTML = '0000000';
 }
 
 var inicio = true;
@@ -248,6 +248,6 @@ function mover(lado1, lado2) {
 }
 
 addEventListener('keydown', function (event) {
-    if (event.keyCode === 38) mover('█', '░');
-    if (event.keyCode === 40) mover('░', '█');
+    if (event.keyCode === 38) mover(obj.car, obj.rua);
+    if (event.keyCode === 40) mover(obj.rua, obj.car);
 });
