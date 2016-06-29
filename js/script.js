@@ -36,7 +36,7 @@ function resetarJogo() {
     qs('.lado2').innerHTML = '░';
 
     // sorteia o lado em que o personagem irá iniciar
-    var lado = ['.lado1', 'lado2'][rand(2)];
+    var lado = ['.lado1', '.lado2'][rand(2)];
 
     // adiciona o personagem na tela
     qs(lado).innerHTML = '█';
@@ -184,7 +184,7 @@ function fim() {
     // se os pontos feitos for maior que o record,
     // adiciona ponto no registro de record
     if (pontos > record) {
-        localStorage.pontos = pontos;
+        localStorage.pontos = qs('.pontos').innerHTML;
     }
 
     // reseta pontos na tela de pause
@@ -201,10 +201,10 @@ function addPonto() {
     var zeros = '0000000';
 
     // pontuação feita até o momento
-    var pontos = qs('.pontos').innerHTML;
+    var pontos = parseInt(qs('.pontos').innerHTML);
 
     // adiciona mais um ponto
-    var novo = (parseInt(pontos) + 1).toString();
+    var novo = (pontos + 1).toString();
 
     // informa nova pontuação na tela do jogo
     var ponto = zeros.substring(0, zeros.length - novo.length) + novo;
@@ -219,20 +219,17 @@ function addVelocidade() {
     var vel = qs('.velocidade').innerHTML;
 
     // aumenta a velocidade
-    var novo = (parseInt(novo) + 1).toString();
+    var novo = (parseInt(vel) + 1).toString();
 
     // informa nova velocidade na tela do jogo
     var ponto = zeros.substr(0, zeros.length - novo.length) + novo;
     qs('.velocidade').innerHTML = ponto;
 }
 
-var lado = ['c', 'b'][Math.floor(Math.random() * 2)];
-
-if (lado === 'c') {
-    document.querySelector('.lado1').innerHTML = '█';
-} else {
-    document.querySelector('.lado2').innerHTML = '█';
-}
+// adiciona o jogador na tela do jogo
+// na para de cima ou de baixo aleatoriamente
+var lado = ['.lado1', '.lado2'][rand(2)];
+qs(lado).innerHTML = '█';
 
 addEventListener('keydown', function (event) {
     if (final === false) {
