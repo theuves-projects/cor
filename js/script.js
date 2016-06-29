@@ -2,6 +2,12 @@
 
 var zeros = '0000000';
 
+var caracteres = {
+    principal: ,
+    adversario: ,
+    rua:
+};
+
 function qs(sel) {
     return document.querySelector(sel);
 }
@@ -12,6 +18,16 @@ function reproduz(nome) {
 
 function rand(num) {
     return Math.floor(Math.random() * num);
+}
+
+function repetir(str, vez) {
+    var repetido = '';
+
+    for (var i = 0; i < vez; i++) {
+        repetido += str;
+    }
+
+    return repetido;
 }
 
 function fim() {
@@ -48,9 +64,7 @@ if (!localStorage.getItem('pontos')) {
 }
 
 qs('.record').innerHTML = localStorage.pontos;
-
-var lado = ['.lado1', '.lado2'][rand(2)];
-qs(lado).innerHTML = '█';
+qs(['.lado1', '.lado2'][rand(2)]).innerHTML = '█';
 
 var vezes = 0;
 var fim1 = false;
@@ -90,17 +104,10 @@ var cb = function () {
     adicionar('.rua1', rua1);
     adicionar('.rua2', rua2);
 
-    if (qual1) {
-        if (qs(qual1).innerHTML === '▓') {
-            if (qs(qual1).innerHTML === '█') {
-                fim();
-                return;
-            } else {
-                qs(qual1).innerHTML = '░';
-                qual1 = '';
-                fim1 = false;
-            }
-        }
+    if (qual1 && qs(qual1).innerHTML === '▓') {
+        qs(qual1).innerHTML = '░';
+        qual1 = '';
+        fim1 = false;
     }
 
     if (fim1) {
@@ -112,10 +119,10 @@ var cb = function () {
             add('.pontos', zeros);
             var pontos = parseInt(qs('.pontos').innerHTML);
 
-            if (pontos % 5 === 0 && pontos > 0) {
+            if (!(pontos % 5) && pontos > 0) {
                 add('.velocidade', '000');
 
-                v = v - 1;
+                v -= 1;
                 definaIntervalo(cb, v);
             }
 
@@ -133,12 +140,10 @@ var cb = function () {
         qual1 = '.lado2';
     }
 
-    if (qual2) {
-        if (qs(qual2).innerHTML === '▓') {
-            qs(qual2).innerHTML = '░';
-            qual2 = '';
-            fim2 = false;
-        }
+    if (qual2 && qs(qual2).innerHTML === '▓') {
+        qs(qual2).innerHTML = '░';
+        qual2 = '';
+        fim2 = false;
     }
 
     if (fim2) qs(qual2).innerHTML = '▓';
@@ -146,8 +151,11 @@ var cb = function () {
     var l1 = qs('.lado1').innerHTML;
     var l2 = qs('.lado2').innerHTML;
 
-    if (l1 === '▓') { fim2 = true; qual2 = '.u1'; }
-    if (l2 === '▓') { fim2 = true; qual2 = '.u2'; }
+    if (l1 === '▓' || l2 === '▓') {
+        fim2 = true;
+
+        qual2 = l1 === '▓' ? '.u1' : '.u2';
+    }
 
     if (l1 !== '█' && l2 !== '█') {
         fim();
@@ -209,26 +217,26 @@ function pause(pausar) {
     pausado = pausar;
 }
 
-function jogar(primeira) {
-    if (!primeira) resetarJogo();
+function jogue(doComeco) {
+    if (!doComeco) resetarJogo();
 
-    qs((primeira ? '.inicio' : '.fim')).hidden = true;
+    qs((doComeco ? '.inicio' : '.fim')).hidden = true;
     qs('.jogo').hidden = false;
 
     reproduz('typewriter_click');
     definaIntervalo(cb, v);
 
-    inicio = false;
-    final = false;
+    if (doComeco) inicio = false;
+    if (!doComeco) final = false;
 }
 
 addEventListener('keypress', function (event) {
     if (event.keyCode === 112 && !final && !inicio) pause(true);
 
     if (event.keyCode === 13) {
-        if (!final && pausado) pause(false);
-        if (!final && inicio) jogar(true);
-        if (final) jogar();
+        if (!final && pausado) pause();
+        if (!final && inicio) jogue(true);
+        if (final) jogue();
     }
 });
 
