@@ -151,10 +151,10 @@ addEventListener('keypress', function (event) {
             resetarJogo(); // reseta jogo
 
             // esconde tela de fim e mostra tela do jogo
-            document.querySelector('.fim').hidden = true;
-            document.querySelector('.jogo').hidden = false;
+            qs('.fim').hidden = true;
+            qs('.jogo').hidden = false;
 
-            // inicia
+            // inicia o jogo
             definaIntervalo(cb, v);
         }
     }
@@ -169,42 +169,61 @@ function fim() {
 
     // para o jogo
     clearInterval(intervalo);
-    document.querySelector('.jogo').hidden = true;
-    document.querySelector('.fim').hidden = false;
-    document.querySelector('.seus-pontos').innerHTML = document.querySelector('.pontos').innerHTML;
 
-    if (parseInt(document.querySelector('.record').innerHTML) < parseInt(document.querySelector('.pontos').innerHTML)) {
-        localStorage.pontos = document.querySelector('.pontos').innerHTML;
+    // esconde tela do jogo e mostra
+    // tela de fim
+    qs('.jogo').hidden = true;
+    qs('.fim').hidden = false;
+
+    // adiciona pontos feitos no jogo na tela final
+    qs('.seus-pontos').innerHTML = qs('.pontos').innerHTML;
+
+    var record = parseInt(qs('.record').innerHTML); // maior pontuação
+    var pontos = parseInt(qs('.pontos').innerHTML); // pontuação feita
+
+    // se os pontos feitos for maior que o record,
+    // adiciona ponto no registro de record
+    if (pontos > record) {
+        localStorage.pontos = pontos;
     }
 
-    document.querySelector('.pontos-pausado').innerHTML = '0000000';
+    // reseta pontos na tela de pause
+    qs('.pontos-pausado').innerHTML = '0000000';
+
+    // informa que o jogo
+    // está na tela final
     final = true;
 }
 
+// adiciona pontos na tela de jogo,
+// sempre somando os pontos já feitos com 1
 function addPonto() {
     var zeros = '0000000';
 
-    novo = parseInt(document.querySelector('.pontos').innerHTML) + 1;
-    novo = novo.toString();
+    // pontuação feita até o momento
+    var pontos = qs('.pontos').innerHTML;
 
+    // adiciona mais um ponto
+    var novo = (parseInt(pontos) + 1).toString();
+
+    // informa nova pontuação na tela do jogo
     var ponto = zeros.substring(0, zeros.length - novo.length) + novo;
-
-    document.querySelector('.pontos').innerHTML = ponto;
+    qs('.pontos').innerHTML = ponto;
 }
 
+// adiciona mais velocidade no jogo
 function addVelocidade() {
     var zeros = '000';
 
-    novo = parseInt(document.querySelector('.velocidade').innerHTML) + 1;
-    novo = novo.toString();
+    // velocidade atual
+    var vel = qs('.velocidade').innerHTML;
 
-    var ponto = zeros.substring(0, zeros.length - novo.length) + novo;
+    // aumenta a velocidade
+    var novo = (parseInt(novo) + 1).toString();
 
-    document.querySelector('.velocidade').innerHTML = ponto;
-}
-
-function oMaisPerto(className) {
-    return document.querySelector(className).innerHTML.charAt(0);
+    // informa nova velocidade na tela do jogo
+    var ponto = zeros.substr(0, zeros.length - novo.length) + novo;
+    qs('.velocidade').innerHTML = ponto;
 }
 
 var lado = ['c', 'b'][Math.floor(Math.random() * 2)];
