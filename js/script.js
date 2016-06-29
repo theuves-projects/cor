@@ -28,25 +28,54 @@ function repetir(str, vez) {
     return repetido;
 }
 
+function ondeEsta() {
+    var d1 = qs('.lado1').innerHTML;
+    var d2 = qs('.lado2').innerHTML;
+
+    if (d1 === obj.car) return '.lado1';
+    if (d2 === obj.car) return '.lado2';
+}
+
+var bloqueado = false;
+
 function fim() {
-    reproduz('chime');
+    bloqueado = true;
 
     clearInterval(intervalo);
+    reproduz('chime');
 
-    qs('.jogo').hidden = true;
-    qs('.fim').hidden = false;
+    var x = 0;
+    var cn = ondeEsta();
 
-    var record = qs('.record').innerHTML;
-    var pontos = qs('.pontos').innerHTML;
+    var inte = setInterval(function () {
+        if (x === 0) {
+            qs(cn).innerHTML = obj.rua;
+        } else {
+            qs(cn).innerHTML = obj.car;
+        }
 
-    if (pontos > record) {
-        localStorage.setItem('pontos', pontos);
-    }
+        x = x ? 0 : 1;
+    }, 100);
 
-    qs('.seus-pontos').innerHTML = pontos;
-    qs('.pontos-pausado').innerHTML = '0000000';
+    setTimeout(function () {
+        clearInterval(inte);
 
-    final = true;
+        qs('.jogo').hidden = true;
+        qs('.fim').hidden = false;
+
+        var record = qs('.record').innerHTML;
+        var pontos = qs('.pontos').innerHTML;
+
+        if (pontos > record) {
+            localStorage.setItem('pontos', pontos);
+        }
+
+        qs('.seus-pontos').innerHTML = pontos;
+        qs('.pontos-pausado').innerHTML = '0000000';
+
+        final = true;
+        bloqueado = false;
+    }, 800);
 }
 
 function add(cn) {
@@ -230,16 +259,6 @@ function jogue(doComeco) {
     if (!doComeco) final = false;
 }
 
-addEventListener('keypress', function (event) {
-    if (event.keyCode === 112 && !final && !inicio) pause(true);
-
-    if (event.keyCode === 13) {
-        if (!final && pausado) pause();
-        if (!final && inicio) jogue(true);
-        if (final) jogue();
-    }
-});
-
 function mover(lado1, lado2) {
     qs('.lado1').innerHTML = lado1;
     qs('.lado2').innerHTML = lado2;
@@ -248,6 +267,27 @@ function mover(lado1, lado2) {
 }
 
 addEventListener('keydown', function (event) {
+    if (bloqueado) return;
+
+    if (event.keyCode === 13) {
+        if (!final && pausado) pause();
+        if (!final && inicio) jogue(true);
+        if (final) jogue();
+    }
+
+    if (event.keyCode === 112 && !final && !inicio) pause(true);
+
     if (event.keyCode === 38) mover(obj.car, obj.rua);
     if (event.keyCode === 40) mover(obj.rua, obj.car);
+
+    if (event.keyCode === 27 && final) {
+        qs('.fim').hidden = true;
+        qs('.inicio').hidden = false;
+
+        reproduz('typewriter_click');
+        resetarJogo();
+
+        inicio = true;
+        final = false;
+    }
 });
