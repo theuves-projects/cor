@@ -1,3 +1,5 @@
+'use strict';
+
 var zeros = '0000000';
 
 function qs(sel) {
@@ -7,12 +9,6 @@ function qs(sel) {
 function reproduz(nome) {
     new Audio('audio/' + nome + '.wav').play();
 }
-
-if (!localStorage.getItem('pontos')) {
-    localStorage.setItem('pontos', zeros);
-}
-
-qs('.record').innerHTML = localStorage.pontos;
 
 function rand(num) {
     return Math.floor(Math.random() * num);
@@ -47,6 +43,12 @@ function add(className, nums) {
     qs(className).innerHTML = ponto;
 }
 
+if (!localStorage.getItem('pontos')) {
+    localStorage.setItem('pontos', zeros);
+}
+
+qs('.record').innerHTML = localStorage.pontos;
+
 var lado = ['.lado1', '.lado2'][rand(2)];
 qs(lado).innerHTML = '█';
 
@@ -75,26 +77,19 @@ var cb = function () {
         qs(rua).innerHTML = qs(rua).innerHTML.replace(re, '') + oque;
     }
 
-    var n = Math.floor(Math.random() * 2);
-
-    if (vezes === 0 || vezes === 7 || vezes === 14) {
-        if (n === 0) {
-            adicionar('.rua1', '▓');
-            adicionar('.rua2', '░');
-        } else {
-            adicionar('.rua2', '▓');
-            adicionar('.rua1', '░');
-        }
-    } else {
-        if (n === 0) {
-            adicionar('.rua1', '░');
-            adicionar('.rua2', '░');
-        } else {
-            adicionar('.rua2', '░');
-            adicionar('.rua1', '░');
-        }
+    var rua1 = '░';
+    var rua2 = '░';
+    
+    if (vezes === 0 || vezes === 7 || vezes === 14) {        
+        var n = rand(2);
+    
+        rua1 = n === 0 ? '▓' : rua1;
+        rua2 = n !== 0 ? '▓' : rua2;
     }
-
+    
+    adicionar('.rua1', rua1);
+    adicionar('.rua2', rua2);
+    
     if (qual1) {
         if (qs(qual1).innerHTML === '▓') {
             if (qs(qual1).innerHTML === '█') {
