@@ -1,52 +1,46 @@
+var zeros = '0000000';
+
 function qs(sel) {
     return document.querySelector(sel);
 }
 
-function html(sel) {
-    return qs(sel).innerHTML;
-}
-
-function reproduzir(nome) {
+function reproduz(nome) {
     new Audio('audio/' + nome + '.wav').play();
 }
 
-if (localStorage.pontos === undefined) {
-    localStorage.pontos = '0000000';
+if (!localStorage.getItem('pontos')) {
+    localStorage.setItem('pontos', zeros);
 }
 
 qs('.record').innerHTML = localStorage.pontos;
-
-var inicio = true;
-var final = false;
-var pausado = false;
 
 function rand(num) {
     return Math.floor(Math.random() * num);
 }
 
 function fim() {
-    reproduzir('chime');
+    reproduz('chime');
 
     clearInterval(intervalo);
 
     qs('.jogo').hidden = true;
     qs('.fim').hidden = false;
-    qs('.seus-pontos').innerHTML = html('.pontos');
 
-    var record = parseInt(html('.record'));
-    var pontos = parseInt(html('.pontos'));
+    var record = qs('.record').innerHTML;
+    var pontos = qs('.pontos').innerHTML;
 
     if (pontos > record) {
-        localStorage.pontos = html('.pontos');
+        localStorage.setItem('pontos', pontos);
     }
 
-    qs('.pontos-pausado').innerHTML = '0000000';
+    qs('.seus-pontos').innerHTML = pontos;
+    qs('.pontos-pausado').innerHTML = zeros;
 
     final = true;
 }
 
 function add(className, nums) {
-    var val = html(className);
+    var val = qs(className).innerHTML;
     var novo = (parseInt(val) + 1).toString();
 
     var ponto = nums.substr(0, nums.length - novo.length) + novo;
@@ -66,8 +60,8 @@ var v = 100;
 var cb = function () {
     function tc() {
         var lds = [
-            html('.rua1').charAt(13),
-            html('.rua2').charAt(13)
+            qs('.rua1').innerHTML.charAt(13),
+            qs('.rua2').innerHTML.charAt(13)
         ];
 
         return lds[0] === '▓' || lds[1] === '▓';
@@ -78,7 +72,7 @@ var cb = function () {
     function adicionar(rua, oque) {
         var re = /^(\░|\▓)/;
 
-        qs(rua).innerHTML = html(rua).replace(re, '') + oque;
+        qs(rua).innerHTML = qs(rua).innerHTML.replace(re, '') + oque;
     }
 
     var n = Math.floor(Math.random() * 2);
@@ -102,8 +96,8 @@ var cb = function () {
     }
 
     if (qual1) {
-        if (html(qual1) === '▓') {
-            if (html(qual1) === '█') {
+        if (qs(qual1).innerHTML === '▓') {
+            if (qs(qual1).innerHTML === '█') {
                 fim();
                 return;
             } else {
@@ -114,15 +108,14 @@ var cb = function () {
         }
     }
 
-    if (fim1 === true) {
-        if (html(qual1) === '█') {
+    if (fim1) {
+        if (qs(qual1).innerHTML === '█') {
             fim();
 
             return;
         } else {
-            add('.pontos', '0000000');
-
-            var pontos = parseInt(html('.pontos'));
+            add('.pontos', zeros);
+            var pontos = parseInt(qs('.pontos').innerHTML);
 
             if (pontos % 5 === 0 && pontos > 0) {
                 add('.velocidade', '000');
@@ -135,30 +128,28 @@ var cb = function () {
         }
     }
 
-    if (html('.rua1').substr(0, 1) === '▓') {
+    if (qs('.rua1').innerHTML.substr(0, 1) === '▓') {
         fim1 = true;
         qual1 = '.lado1';
     }
 
-    if (html('.rua2').substr(0, 1) === '▓') {
+    if (qs('.rua2').innerHTML.substr(0, 1) === '▓') {
         fim1 = true;
         qual1 = '.lado2';
     }
 
     if (qual2) {
-        if (html(qual2) === '▓') {
+        if (qs(qual2).innerHTML === '▓') {
             qs(qual2).innerHTML = '░';
             qual2 = '';
             fim2 = false;
         }
     }
 
-    if (fim2 === true) {
-        qs(qual2).innerHTML = '▓';
-    }
+    if (fim2) qs(qual2).innerHTML = '▓';
 
-    var l1 = html('.lado1');
-    var l2 = html('.lado2');
+    var l1 = qs('.lado1').innerHTML;
+    var l2 = qs('.lado2').innerHTML;
 
     if (l1 === '▓') { fim2 = true; qual2 = '.u1'; }
     if (l2 === '▓') { fim2 = true; qual2 = '.u2'; }
@@ -169,7 +160,7 @@ var cb = function () {
     }
 
     vezes = vezes + 1;
-    vezes = vezes === 16 ? vezes = 0 : vezes
+    vezes = vezes === 16 ? vezes = 0 : vezes;
 };
 
 var intervalo;
@@ -199,75 +190,69 @@ function resetarJogo() {
     qual2 = '';
     v = 100;
 
-    qs('.pontos').innerHTML = '0000000';
-    qs('.velocidade').innerHTML = '000';
-    qs('.seus-pontos').innerHTML = '0000000 ';
+    qs('.pontos').innerHTML = zeros;
+    qs('.velocidade').innerHTML = zeros.substr(-3);
+    qs('.seus-pontos').innerHTML = zeros;
 }
 
+var inicio = true;
+var final = false;
+var pausado = false;
+
 addEventListener('keypress', function (event) {
+    if (event.keyCode !== 112 && event.keyCode !== 13) return;
+
     if (event.keyCode === 112) {
-        if (final === false && inicio === false) {
-            reproduzir('typewriter_click');
-
-            clearInterval(intervalo);
+        if (!final && !inicio) {
             qs('.jogo').hidden = true;
+            reproduz('typewriter_click');
             qs('.pausado').hidden = false;
-            qa('.pontos-pausado').innerHTML = html('.pontos');
 
+            qs('.pontos-pausado').innerHTML = qs('.pontos').innerHTML;
+            clearInterval(intervalo);
             pausado = true;
         }
     }
 
     if (event.keyCode === 13) {
-        if (final === false && pausado === true) {
-            reproduzir('typewriter_click');
-
-            definaIntervalo(cb, v);
+        if (!final && pausado) {
             qs('.pausado').hidden = true;
+            reproduz('typewriter_click');
             qs('.jogo').hidden = false;
 
+            definaIntervalo(cb, v);
             pausado = false;
-        }
-
-        if (final === false && inicio === true) {
-            reproduzir('typewriter_click');
-
-            definaIntervalo(cb, v);
+        } else if (!final && inicio) {
             qs('.inicio').hidden = true;
-            qs('.jogo').hidden = false;
-
-            inicio = false;
-        }
-
-        if (final === true) {
-            reproduzir('typewriter_click');
-            final = false;
-
-            resetarJogo();
-            qs('.fim').hidden = true;
+            reproduz('typewriter_click');
             qs('.jogo').hidden = false;
 
             definaIntervalo(cb, v);
+            inicio = false;
+        } else if (final) {
+            resetarJogo();
+
+            qs('.fim').hidden = true;
+            reproduz('typewriter_click');
+            qs('.jogo').hidden = false;
+
+            definaIntervalo(cb, v);
+            final = false;
         }
     }
 });
 
+function mover(onde, lado1, lado2) {
+    qs('.lado1').innerHTML = lado1;
+    qs('.lado2').innerHTML = lado2;
+
+    reproduz('womp');
+    lado = onde;
+}
+
 addEventListener('keydown', function (event) {
-    if (final === false) {
-        if (event.keyCode === 38) {
-            qs('.lado1').innerHTML = '█';
-            qs('.lado2').innerHTML = '░';
+    if (final || event.keyCode !== 38 && event.keyCode !== 40) return;
 
-            lado = 'c';
-            reproduzir('womp');
-        }
-
-        if (event.keyCode === 40) {
-            qs('.lado1').innerHTML = '░';
-            qs('.lado2').innerHTML = '█';
-
-            lado = 'b';
-            reproduzir('womp');
-        }
-    }
+    if (event.keyCode === 38) mover('c', '█', '░');
+    if (event.keyCode === 40) mover('b', '░', '█');
 });
