@@ -79,17 +79,17 @@ var cb = function () {
 
     var rua1 = '░';
     var rua2 = '░';
-    
-    if (vezes === 0 || vezes === 7 || vezes === 14) {        
+
+    if (!(vezes % 7)) {
         var n = rand(2);
-    
+
         rua1 = n === 0 ? '▓' : rua1;
         rua2 = n !== 0 ? '▓' : rua2;
     }
-    
+
     adicionar('.rua1', rua1);
     adicionar('.rua2', rua2);
-    
+
     if (qual1) {
         if (qs(qual1).innerHTML === '▓') {
             if (qs(qual1).innerHTML === '█') {
@@ -154,8 +154,7 @@ var cb = function () {
         return;
     }
 
-    vezes = vezes + 1;
-    vezes = vezes === 16 ? vezes = 0 : vezes;
+    vezes = vezes === 15 ? 0 : vezes + 1;
 };
 
 var intervalo;
@@ -194,60 +193,53 @@ var inicio = true;
 var final = false;
 var pausado = false;
 
-addEventListener('keypress', function (event) {
-    if (event.keyCode !== 112 && event.keyCode !== 13) return;
+function pause(pausar) {
+    qs('.jogo').hidden = pausar;
+    qs('.pausado').hidden = !pausar;
 
-    if (event.keyCode === 112) {
-        if (!final && !inicio) {
-            qs('.jogo').hidden = true;
-            reproduz('typewriter_click');
-            qs('.pausado').hidden = false;
+    reproduz('typewriter_click');
 
-            qs('.pontos-pausado').innerHTML = qs('.pontos').innerHTML;
-            clearInterval(intervalo);
-            pausado = true;
-        }
+    if (pausar) {
+        qs('.pontos-pausado').innerHTML = qs('.pontos').innerHTML;
+        clearInterval(intervalo);
+    } else {
+        definaIntervalo(cb, v);
     }
 
+    pausado = pausar;
+}
+
+function jogar(primeira) {
+    if (!primeira) resetarJogo();
+
+    qs((primeira ? '.inicio' : '.fim')).hidden = true;
+    qs('.jogo').hidden = false;
+
+    reproduz('typewriter_click');
+    definaIntervalo(cb, v);
+
+    inicio = false;
+    final = false;
+}
+
+addEventListener('keypress', function (event) {
+    if (event.keyCode === 112 && !final && !inicio) pause(true);
+
     if (event.keyCode === 13) {
-        if (!final && pausado) {
-            qs('.pausado').hidden = true;
-            reproduz('typewriter_click');
-            qs('.jogo').hidden = false;
-
-            definaIntervalo(cb, v);
-            pausado = false;
-        } else if (!final && inicio) {
-            qs('.inicio').hidden = true;
-            reproduz('typewriter_click');
-            qs('.jogo').hidden = false;
-
-            definaIntervalo(cb, v);
-            inicio = false;
-        } else if (final) {
-            resetarJogo();
-
-            qs('.fim').hidden = true;
-            reproduz('typewriter_click');
-            qs('.jogo').hidden = false;
-
-            definaIntervalo(cb, v);
-            final = false;
-        }
+        if (!final && pausado) pause(false);
+        if (!final && inicio) jogar(true);
+        if (final) jogar();
     }
 });
 
-function mover(onde, lado1, lado2) {
+function mover(lado1, lado2) {
     qs('.lado1').innerHTML = lado1;
     qs('.lado2').innerHTML = lado2;
 
     reproduz('womp');
-    lado = onde;
 }
 
 addEventListener('keydown', function (event) {
-    if (final || event.keyCode !== 38 && event.keyCode !== 40) return;
-
-    if (event.keyCode === 38) mover('c', '█', '░');
-    if (event.keyCode === 40) mover('b', '░', '█');
+    if (event.keyCode === 38) mover('█', '░');
+    if (event.keyCode === 40) mover('░', '█');
 });
