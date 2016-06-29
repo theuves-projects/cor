@@ -23,6 +23,51 @@ var inicio = true; // se está na tela inicial
 var final = false; // se está na tela final
 var pausado = false; // se está pausado
 
+// função para gerar números aleatórios
+function rand(num) {
+    return Math.floor(Math.random() * num);
+}
+
+// reseta informação do jogo
+function resetarJogo() {
+
+    // apaga o personagem
+    qs('.lado1').innerHTML = '░';
+    qs('.lado2').innerHTML = '░';
+
+    // sorteia o lado em que o personagem irá iniciar
+    var lado = ['.lado1', 'lado2'][rand(2)];
+
+    // adiciona o personagem na tela
+    qs(lado).innerHTML = '█';
+
+    // apaga personagens adiversarios da rua
+    qs('.rua1').innerHTML = '░░░░░░░░░░░░░░░';
+    qs('.rua2').innerHTML = '░░░░░░░░░░░░░░░';
+
+    // apaga personagens adiversarios
+    // da rua atrás do personagem principal
+    qs('.u1').innerHTML = '░';
+    qs('.u2').innerHTML = '░';
+
+    //===
+    vezes = 0;
+
+    fim1 = false;
+    fim2 = false;
+
+    qual1 = '';
+    qual2 = '';
+
+    v = 100;
+    //===
+
+    // reseta pontuação
+    qs('.pontos').innerHTML = '0000000';
+    qs('.velocidade').innerHTML = '000';
+    qs('.seus-pontos').innerHTML = '0000000 ';
+}
+
 addEventListener('keypress', function (event) {
 
     // código da tecla pressionada
@@ -93,42 +138,19 @@ addEventListener('keypress', function (event) {
             inicio = false;
         }
 
+        // se estiver na tela de fim de jogo
         if (final === true) {
+
+            // reproduz som de tecla
             reproduzir('typewriter_click');
 
+            // informa que não está
+            // mais na tela final
             final = false;
 
-            document.querySelector('.lado1').innerHTML = '░';
-            document.querySelector('.lado2').innerHTML = '░';
+            resetarJogo(); // reseta jogo
 
-            var lado = ['c', 'b'][Math.floor(Math.random() * 2)];
-
-            if (lado === 'c') {
-                document.querySelector('.lado1').innerHTML = '█';
-            } else {
-                document.querySelector('.lado2').innerHTML = '█';
-            }
-
-            document.querySelector('.rua1').innerHTML = '░░░░░░░░░░░░░░░';
-            document.querySelector('.rua2').innerHTML = '░░░░░░░░░░░░░░░';
-
-            document.querySelector('.u1').innerHTML = '░';
-            document.querySelector('.u2').innerHTML = '░';
-
-            vezes = 0;
-
-            fim1 = false;
-            fim2 = false;
-
-            qual1 = '';
-            qual2 = '';
-
-            v = 100;
-
-            document.querySelector('.pontos').innerHTML = '0000000';
-            document.querySelector('.velocidade').innerHTML = '000';
-            document.querySelector('.seus-pontos').innerHTML = '0000000 ';
-
+            // esconde tela de fim e mostra tela do jogo
             document.querySelector('.fim').hidden = true;
             document.querySelector('.jogo').hidden = false;
 
@@ -138,9 +160,14 @@ addEventListener('keypress', function (event) {
     }
 });
 
+// função para exibir a
+// tela fim de jogo
 function fim() {
+
+    // reproduz som
     reproduzir('chime');
 
+    // para o jogo
     clearInterval(intervalo);
     document.querySelector('.jogo').hidden = true;
     document.querySelector('.fim').hidden = false;
