@@ -71,6 +71,7 @@ function fim() {
 
         if (pontos > record) {
             localStorage.setItem('pontos', pontos);
+            qs('.record').innerHTML = localStorage.pontos;
         }
 
         qs('.seus-pontos').innerHTML = pontos;
@@ -263,6 +264,8 @@ function jogue(doComeco) {
 }
 
 function mover(lado1, lado2) {
+    if (lado1 !== qs('.lado2').innerHTML) return;
+
     qs('.lado1').innerHTML = lado1;
     qs('.lado2').innerHTML = lado2;
 
