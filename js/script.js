@@ -10,7 +10,10 @@ function qs(sel) {
     return document.querySelector(sel);
 }
 
+var som = true;
+
 function reproduz(nome) {
+    if (som === false) return;
     new Audio('audio/' + nome + '.wav').play();
 }
 
@@ -275,6 +278,7 @@ addEventListener('keydown', function (event) {
         if (final) jogue();
     }
 
+    if (event.keyCode === 83) som = som ? false : true;
     if (event.keyCode === 80 && !final && !inicio) pause(true);
 
     if (event.keyCode === 38) mover(obj.car, obj.rua);
