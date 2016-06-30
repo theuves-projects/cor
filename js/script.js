@@ -273,21 +273,23 @@ function mover(lado1, lado2) {
 }
 
 addEventListener('keydown', function (event) {
+    var kc = event.keyCode;
+
     if (bloqueado) return;
 
-    if (event.keyCode === 13) {
+    if (kc === 13) {
         if (!final && pausado) pause();
         if (!final && inicio) jogue(true);
         if (final) jogue();
     }
 
-    if (event.keyCode === 83) som = som ? false : true;
-    if (event.keyCode === 80 && !final && !inicio) pause(true);
+    if (kc === 83) som = som ? false : true;
+    if (kc === 80 && !final && !inicio && !pausado) pause(true);
 
-    if (event.keyCode === 38) mover(obj.car, obj.rua);
-    if (event.keyCode === 40) mover(obj.rua, obj.car);
+    if (kc === 38) mover(obj.car, obj.rua);
+    if (kc === 40) mover(obj.rua, obj.car);
 
-    if (event.keyCode === 27 && final) {
+    if (kc === 27 && final) {
         qs('.fim').hidden = true;
         qs('.inicio').hidden = false;
 
