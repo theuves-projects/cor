@@ -290,9 +290,6 @@
         if (kc === 83) som = som ? false : true;
         if (kc === 80 && !final && !inicio && !pausado) pause(true);
 
-        if (kc === 38) mover(obj.car, obj.rua);
-        if (kc === 40) mover(obj.rua, obj.car);
-
         if (kc === 27 && final) {
             qs('.fim').hidden = true;
             qs('.inicio').hidden = false;
@@ -303,5 +300,10 @@
             inicio = true;
             final = false;
         }
+
+        if (qs('.jogo').hidden) return;
+
+        if (kc === 38) mover(obj.car, obj.rua);
+        if (kc === 40) mover(obj.rua, obj.car);
     });
 })();
