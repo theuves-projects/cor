@@ -14,7 +14,11 @@
         return document.querySelector(sel);
     }
 
-    var som = true;
+    if (!localStorage.getItem('som')) {
+        localStorage.setItem('som', 'true');
+    }
+
+    var som = eval(localStorage.getItem('som'));
 
     function reproduz(nome) {
         if (som === false) return;
@@ -287,7 +291,12 @@
             if (final) jogue();
         }
 
-        if (kc === 83) som = som ? false : true;
+        function mudeSom() {
+            som = som ? false : true;
+            localStorage.setItem('som', som);
+        }
+
+        if (kc === 83) mudeSom();
         if (kc === 80 && !final && !inicio && !pausado) pause(true);
 
         if (kc === 27 && final) {
