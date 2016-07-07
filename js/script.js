@@ -21,7 +21,7 @@
     var som = eval(localStorage.getItem('som'));
 
     function reproduz(nome) {
-        if (som === false) return;
+        if (!som) return;
         new Audio('audio/' + nome + '.wav').play();
     }
 
@@ -85,7 +85,7 @@
             qs('.seus-pontos').innerHTML = pontos;
             qs('.pontos-pausado').innerHTML = '0000000';
 
-            final = true;
+            nofinal = true;
             bloqueado = false;
         }, 800);
     }
@@ -239,7 +239,7 @@
     }
 
     var inicio = true;
-    var final = false;
+    var nofinal = false;
     var pausado = false;
 
     function pause(pausar) {
@@ -268,7 +268,7 @@
         definaIntervalo(cb, v);
 
         if (doComeco) inicio = false;
-        if (!doComeco) final = false;
+        if (!doComeco) nofinal = false;
     }
 
     function mover(lado1, lado2) {
@@ -286,9 +286,9 @@
         if (bloqueado) return;
 
         if (kc === 13) {
-            if (!final && pausado) pause();
-            if (!final && inicio) jogue(true);
-            if (final) jogue();
+            if (!nofinal && pausado) pause();
+            if (!nofinal && inicio) jogue(true);
+            if (nofinal) jogue();
         }
 
         function mudeSom() {
@@ -297,9 +297,9 @@
         }
 
         if (kc === 83) mudeSom();
-        if (kc === 80 && !final && !inicio && !pausado) pause(true);
+        if (kc === 80 && !nofinal && !inicio && !pausado) pause(true);
 
-        if (kc === 27 && final) {
+        if (kc === 27 && nofinal) {
             qs('.fim').hidden = true;
             qs('.inicio').hidden = false;
 
@@ -307,7 +307,7 @@
             resetarJogo();
 
             inicio = true;
-            final = false;
+            nofinal = false;
         }
 
         if (qs('.jogo').hidden) return;
