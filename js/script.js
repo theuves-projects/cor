@@ -312,7 +312,10 @@
 
         if (qs('.jogo').hidden) return;
 
-        if (kc === 38) mover(obj.car, obj.rua);
-        if (kc === 40) mover(obj.rua, obj.car);
+        if (kc === 38 || kc === 104) mover(obj.car, obj.rua);
+        if (kc === 40 || kc === 98) mover(obj.rua, obj.car);
     });
 })();
+
+// 104
+// 98
