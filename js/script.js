@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    // Cor | v0.3.0 | Licença: MIT
+    // Cor | v0.3.1 | Licença: MIT
     // Copyright (c) 2016 Matheus Alves
 
     var obj = {
