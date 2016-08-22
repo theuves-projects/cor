@@ -6,7 +6,7 @@
 
 ## Como Jogar
 
-Acesse-o no seguinte endereço: [theuves.github.io/cor](https://theuves.github.io/cor/), e use:
+Acesse-o no seguinte endereço: [joguinhos.github.io/cor](https://joguinhos.github.io/cor/), e use:
 
  - <kbd>Enter</kbd> — para iniciar ou reiniciar o jogo
  - <kbd>↑</kbd> ou <kbd>↓</kbd> — para movimentar o personagem para cima ou para baixo
